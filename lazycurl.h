@@ -42,8 +42,10 @@ namespace lazycurl {
 	static std::string exec_cmd(const char* cmd) {
 		char buffer[128];
 		std::string result = "";
+
 		FILE* pipe = _popen(cmd, "r");
-		if (!pipe) throw std::runtime_error("popen() failed!");
+		assert(pipe);
+
 		try {
 			while (fgets(buffer, sizeof buffer, pipe) != NULL) {
 				result += buffer;
@@ -53,6 +55,7 @@ namespace lazycurl {
 			_pclose(pipe);
 			throw;
 		}
+
 		_pclose(pipe);
 		return result;
 	}
